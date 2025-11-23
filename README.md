@@ -27,10 +27,3 @@ models/
 routers/
   └─ books.py # Books CRUD routes
 requirements.txt # Python dependencies
-
----
-
-## 🛠️ Next Steps
-
-- Remove the in-memory database and replace it with a real database using SQLAlchemy.
-- Add unit and integration tests for the API.
