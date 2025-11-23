@@ -17,15 +17,15 @@ Provides basic CRUD operations for managing books.
 
 ## 📁 Project Structure
 
-main.py                     # FastAPI app entrypoint
+main.py                     FastAPI app entrypoint
 pydantic_schemas/
-  └─ book.py                # Pydantic schemas
+  └─ book.py                Pydantic schemas
 database/
-  ├─ database.py            # engine, SessionLocal, Base, get_db()
+  ├─ database.py            engine, SessionLocal, Base, get_db()
   └─ models/
-       └─ book.py           # SQLAlchemy ORM model
+       └─ book.py           SQLAlchemy ORM model
 routers/
-  └─ books.py               # CRUD routes
+  └─ books.py               CRUD routes
 requirements.txt
 
 ---
