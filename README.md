@@ -16,7 +16,7 @@ Provides basic CRUD operations for managing books.
 ---
 
 ## 📁 Project Structure
-
+```
 main.py                     FastAPI app entrypoint
 pydantic_schemas/
   └─ book.py                Pydantic schemas
@@ -27,7 +27,7 @@ database/
 routers/
   └─ books.py               CRUD routes
 requirements.txt
-
+```
 ---
 
 ## 🛠️ Next Steps
