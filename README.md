@@ -19,11 +19,19 @@ All data is stored **in-memory** (no database).
 
 ## 📁 Project Structure
 
-main.py # FastAPI app entrypoint
-data/
-  └─ in_memory_books.py # In memory db books
-models/
-  └─ book.py # Book data model
+main.py                     # FastAPI app entrypoint
+pydantic_schemas/
+  └─ book.py                # Pydantic schemas
+database/
+  ├─ database.py            # engine, SessionLocal, Base, get_db()
+  └─ models/
+       └─ book.py           # SQLAlchemy ORM model
 routers/
-  └─ books.py # Books CRUD routes
-requirements.txt # Python dependencies
+  └─ books.py               # CRUD routes
+requirements.txt
+
+---
+
+## 🛠️ Next Steps
+
+- Add 'Genre' router endpoints and model
