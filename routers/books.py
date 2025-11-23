@@ -1,57 +1,51 @@
 from typing import List
-
-from fastapi import APIRouter, HTTPException
-from models.book import Book, BookCreate, BookUpdate
+from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, HTTPException
+from database.database import get_db
+from database.models.book import Book
+from pydantic_schemas.book import BookCreate, BookUpdate, BookResponse
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Book])
-def get_books():
-    return books
+@router.get("/", response_model=List[BookResponse])
+def get_books(db: Session = Depends(get_db)):
+    return db.query(Book).all()
 
 
-@router.get("/{book_id}", response_model=Book)
-def get_book(book_id: str):
-    book = next((b for b in books if b.id == book_id), None)
+@router.get("/{book_id}", response_model=BookResponse)
+def get_book(book_id: str, db: Session = Depends(get_db)):
+    book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
 
-@router.post("/", response_model=Book)
-def add_book(data: BookCreate):
-    new_book = Book(
-        id=str(len(books) + 1),
-        title=data.title,
-        author=data.author,
-        year=data.year,
-        genre=data.genre,
-    )
-    books.append(new_book)
-    return new_book
-
-
-@router.put("/{book_id}", response_model=Book)
-def update_book(book_id: str, data: BookUpdate):
-    book = next((b for b in books if b.id == book_id), None)
-    if not book:
-        raise HTTPException(status_code=404, detail="Book not found")
-    if data.title is not None:
-        book.title = data.title
-    if data.author is not None:
-        book.author = data.author
-    if data.year is not None:
-        book.year = data.year
-    if data.genre is not None:
-        book.genre = data.genre
+@router.post("/", response_model=BookResponse)
+def add_book(data: BookCreate, db: Session = Depends(get_db)):
+    book = Book(**data.dict())
+    db.add(book)
+    db.commit()
+    db.refresh(book)
     return book
 
 
-@router.delete("/{book_id}", response_model=Book)
-def delete_book(book_id: str):
-    global books
-    book = next((b for b in books if b.id == book_id), None)
+@router.put("/{book_id}", response_model=BookResponse)
+def update_book(book_id: str, data: BookUpdate, db: Session = Depends(get_db)):
+    book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
-    books = [b for b in books if b.id != book_id]
+    for key, value in data.dict(exclude_unset=True).items():
+        setattr(book, key, value)
+    db.commit()
+    db.refresh(book)
+    return book
+
+
+@router.delete("/{book_id}", response_model=BookResponse)
+def delete_book(book_id: str, db: Session = Depends(get_db)):
+    book = db.query(Book).filter(Book.id == book_id).first()
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    db.delete(book)
+    db.commit()
     return book
