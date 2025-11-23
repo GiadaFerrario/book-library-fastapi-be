@@ -1,6 +1,6 @@
 # Book Library REST API
 
-A simple **Book Library backend** implemented with **FastAPI** for portfolio purposes.  
+A simple **Book Library backend** implemented with **FastAPI**.  
 Provides basic CRUD operations for managing books.
 
 ---
@@ -12,8 +12,6 @@ Provides basic CRUD operations for managing books.
 - Add a new book
 - Update an existing book
 - Delete a book
-
-All data is stored **in-memory** (no database).
 
 ---
 
